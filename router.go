@@ -19,19 +19,23 @@ type Routes []Route
 
 var routes = Routes{
   Route{ "Index", "GET", "/", services.Usage,"Prints API usage" },
+  Route{ "BuildPackList", "GET", "/buildpack", services.BuildPackList,"Return list of build packs" },
+  Route{ "BuildPackcreate", "POST", "/buildpack", services.BuildPackCreate,"Adds new build packs" },
 }
 
 func NewRouter() *mux.Router {
 
   router := mux.NewRouter().StrictSlash(true)
   logger := handlers.NewLogger()
+
   for _, route := range routes {
     loggedHandler := logger.LoggerHandler(route.HandlerFunc)
+    panicHandler := handlers.RecoverHandler(loggedHandler)
     router.
       Methods(route.Method).
       Path(route.Pattern).
       Name(route.Name).
-      Handler(loggedHandler)
+      Handler(panicHandler)
 
   }
 

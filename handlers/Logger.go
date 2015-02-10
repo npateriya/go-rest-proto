@@ -5,7 +5,6 @@ import (
   "net/http"
   "os"
   "time"
-  "fmt"
 )
 
 type Logger struct {
@@ -13,7 +12,6 @@ type Logger struct {
 }
 
 func NewLogger() *Logger {
-  fmt.Println("new logger")
   return &Logger{log.New(os.Stdout, "[shipped] ", 0)}
 }
 
